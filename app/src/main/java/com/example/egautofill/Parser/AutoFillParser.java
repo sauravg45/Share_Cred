@@ -138,7 +138,7 @@ public class AutoFillParser {
 
     static Bitmap stringToBitMap(String encodedString) {
         try {
-            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            byte[] encodeByte = Base64.decode(encodedString, Base64.URL_SAFE);
             return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
         } catch (Exception e) {
             e.getMessage();
