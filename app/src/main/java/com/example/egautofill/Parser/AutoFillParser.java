@@ -105,7 +105,7 @@ public class AutoFillParser {
         ids.toArray(requiredIds);
         response.setSaveInfo(
                 // We're simple, so we're generic
-                new SaveInfo.Builder(SaveInfo.SAVE_DATA_TYPE_GENERIC, requiredIds).build());
+                new SaveInfo.Builder(SaveInfo.SAVE_DATA_TYPE_PASSWORD|SaveInfo.SAVE_DATA_TYPE_USERNAME, requiredIds).build());
         return response.build();
     }
 
