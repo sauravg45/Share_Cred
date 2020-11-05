@@ -49,7 +49,7 @@ public class AutofillEgService extends AutofillService {
         super.onConnected();
         context=getApplicationContext();
         // TODO(b/114236837): use its own preferences?
-       // MyPreferences pref = MyPreferences.getInstance(getApplicationContext());
+
         mAuthenticateResponses = false;
         mAuthenticateDatasets = false;
         mNumberDatasets = 2;
