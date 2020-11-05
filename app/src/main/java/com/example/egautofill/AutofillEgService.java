@@ -120,7 +120,7 @@ public class AutofillEgService extends AutofillService {
         List<AssistStructure> structures =
                 fillContexts.stream().map(FillContext::getStructure).collect(toList());
         AssistStructure structure = fillContexts.get(fillContexts.size() - 1).getStructure();
-        ArrayMap<String, AutofillId> fields = getAutofillableFields(structure);
+        //ArrayMap<String, AutofillId> fields = getAutofillableFields(structure);
        // ClientParser parser = new ClientParser(structures);
         AutoFillSaveParser parser=new AutoFillSaveParser();
         parser.structureParser(structure,context);

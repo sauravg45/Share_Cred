@@ -16,16 +16,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".AutofillEgService"
             android:label="Debug Autofill Service"
             android:permission="android.permission.BIND_AUTOFILL_SERVICE">
-            <meta-data
-                android:name="android.autofill"
-                android:resource="@xml/debug_service"/>
             <intent-filter>
                 <action android:name="android.service.autofill.AutofillService" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.autofill"
+                android:resource="@xml/debug_service" />
         </service>
     </application>
 
