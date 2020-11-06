@@ -9,23 +9,23 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:padding="50dp">
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/cred_label"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:inputType="textPassword"
-            android:textAppearance="?attr/textAppearanceHeadline6">
-        </TextView>
+            android:textAppearance="?attr/textAppearanceHeadline6"></TextView>
         <ImageButton
+            android:id="@+id/shwHideBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_remove_red_eye_24px"
-            android:background="@android:color/transparent"
             android:layout_alignParentEnd="true"
-            android:id="@+id/shwHideBtn"
-            />
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_remove_red_eye_24px" />
     </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -1,6 +1,7 @@
 package com.example.egautofill;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.room.Room;
 
 import android.os.Bundle;
@@ -9,14 +10,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.example.egautofill.DTO.UIDataDTO;
 import com.example.egautofill.Entity.UserPassDataBase;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -28,6 +34,14 @@ public class MainActivity extends AppCompatActivity implements CustomListAdapter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+//        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.)
+        getSupportActionBar().setElevation(0);
+        LinearLayout contentLayout = coordinatorLayout.findViewById(R.id.contentLayout);
+        BottomSheetBehavior<LinearLayout> sheetBehaviour = BottomSheetBehavior.from(contentLayout);
+        sheetBehaviour.setFitToContents(false);
+        sheetBehaviour.setHideable(false);
+        sheetBehaviour.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
         //Create the an adapter & populate the list view
         String[] credArray = {"sourabhmeena381@gmail.com", "err0w1", "9968380690", "saurabh.meena@zs.com"};
         AppDatabase appDatabase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"user-db").allowMainThreadQueries().build();

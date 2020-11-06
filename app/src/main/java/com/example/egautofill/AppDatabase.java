@@ -13,7 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {UserPassDataBase.class},version = 1,exportSchema = false)
-public abstract class AppDatabase extends RoomDatabase {
+public abstract class   AppDatabase extends RoomDatabase {
 
     public abstract UserPassDataDao userPassDataDao();
 
