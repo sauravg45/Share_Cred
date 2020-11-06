@@ -8,23 +8,45 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:padding="50dp">
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/cardview_shadow_end_color">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/cred_label"
+        <ImageView
+            android:id="@+id/cred_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/circular_img_container"/>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:inputType="textPassword"
-            android:textAppearance="?attr/textAppearanceHeadline6"></TextView>
+            android:layout_toRightOf="@+id/cred_icon"
+            android:orientation="vertical"
+            android:paddingLeft="10dp">
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/cred_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceHeadline6"></TextView>
+            <TextView
+                android:id="@+id/cred_pass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+        </LinearLayout>
+
         <ImageButton
             android:id="@+id/shwHideBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_remove_red_eye_24px" />
     </RelativeLayout>

@@ -42,12 +42,14 @@ public class MainActivity extends AppCompatActivity implements CustomListAdapter
         sheetBehaviour.setFitToContents(false);
         sheetBehaviour.setHideable(false);
         sheetBehaviour.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
+        sheetBehaviour.setHalfExpandedRatio((float) 0.9);
         //Create the an adapter & populate the list view
+
         String[] credArray = {"sourabhmeena381@gmail.com", "err0w1", "9968380690", "saurabh.meena@zs.com"};
         AppDatabase appDatabase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"user-db").allowMainThreadQueries().build();
-        List<UIDataDTO> databases=appDatabase.userPassDataDao().getAll();
-        ArrayList<String> dataArray = prepareDataForListView(databases);
-        CustomListAdapter adapter = new CustomListAdapter(MainActivity.this, dataArray);
+        List<UIDataDTO> databases= appDatabase.userPassDataDao().getAll();
+//        ArrayList<String> dataArray = prepareDataForListView(databases);
+        CustomListAdapter adapter = new CustomListAdapter(MainActivity.this, databases);
         ListView listView = (ListView) findViewById(R.id.cred_list);
         adapter.setCustomButtonListener(MainActivity.this);
         listView.setAdapter(adapter);
@@ -55,27 +57,27 @@ public class MainActivity extends AppCompatActivity implements CustomListAdapter
 
 //    @Override
     @Override
-    public void onButtonClickListener(int position, String value, CustomListAdapter.ViewHolder viewHolder){
+    public void onButtonClickListener(int position, UIDataDTO data, CustomListAdapter.ViewHolder viewHolder){
         Object buttonTag = viewHolder.button.getTag();
         if(buttonTag == "hidden"){
             viewHolder.button.setImageResource(R.drawable.ic_visibility_off_black_24dp);
-            viewHolder.text.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            viewHolder.pass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             viewHolder.button.setTag("shown");
         } else if(buttonTag == "shown"){
             viewHolder.button.setImageResource(R.drawable.ic_remove_red_eye_24px);
-            viewHolder.text.setInputType( InputType.TYPE_CLASS_TEXT |
+            viewHolder.pass.setInputType( InputType.TYPE_CLASS_TEXT |
                     InputType.TYPE_TEXT_VARIATION_PASSWORD);
             viewHolder.button.setTag("hidden");
         }
 //        Toast.makeText(MainActivity.this, "Value:" + value + "pos: " + position, Toast.LENGTH_SHORT).show();
     }
 
-    protected ArrayList<String> prepareDataForListView(List<UIDataDTO> list){
-        ArrayList<String> result = new ArrayList<String>();
-        for(UIDataDTO Cred: list){
-            result.add(Cred.getData());
-        }
-        return result;
-    }
+//    protected ArrayList<String> prepareDataForListView(List<UIDataDTO> list){
+//        ArrayList result = new ArrayList();
+//        for(UIDataDTO Cred: list){
+//            result.add({"label": Cred.getData(), "pass": Cred.getPassword()});
+//        }
+//        return result;
+//    }
 
 }
