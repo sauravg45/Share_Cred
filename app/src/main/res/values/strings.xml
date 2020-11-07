@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Cred Pass</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string-array name="imagePicker">
+        <item>From Gallery</item>
+        <item>From Camera</item>
+    </string-array>
 </resources>

@@ -11,19 +11,50 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:background="@color/colorPrimary"
-        android:padding="50dp">
+        android:paddingLeft="10dp">
+        <RelativeLayout
+            android:layout_width="@dimen/toolbar_profile_width"
+            android:layout_height="wrap_content">
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_image"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:src="@drawable/profile_pic"
+                app:civ_border_width="2dp"
+                app:civ_border_color="#FF000000"/>
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/edit_profiePic"
+                android:layout_width="@dimen/ic_plus_width"
+                android:layout_height="@dimen/ic_plus_width"
+                android:layout_alignBottom="@id/profile_image"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_plus"
+                app:civ_border_width="1dp"
+                app:civ_border_color="#FF000000"/>
+        </RelativeLayout>
 
-        <EditText
-            android:id="@+id/searchTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:id="@+id/datesFilterButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\@fountainhead"
+                android:textColor="@color/colorBackground"
+                android:fontFamily="cursive"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text = "Sourabh Meena"
+                android:textSize="24sp"
+                android:textColor="@color/colorBackground"/>
+        </LinearLayout>
     </LinearLayout>
 
     <!-- Content of the backdrop -->

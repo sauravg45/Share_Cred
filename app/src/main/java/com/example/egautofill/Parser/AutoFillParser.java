@@ -97,8 +97,6 @@ public class AutoFillParser {
                dataset.setValue(field.getValue(), AutofillValue.forText(value), presentation);
            }
             response.addDataset(dataset.build());
-
-
         }
         Collection<AutofillId> ids = fields.values();
         AutofillId[] requiredIds = new AutofillId[ids.size()];
