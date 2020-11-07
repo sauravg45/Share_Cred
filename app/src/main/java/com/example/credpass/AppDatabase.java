@@ -1,4 +1,4 @@
-package com.example.egautofill;
+package com.example.credpass;
 
 import android.content.Context;
 
@@ -6,8 +6,8 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.egautofill.Dao.UserPassDataDao;
-import com.example.egautofill.Entity.UserPassDataBase;
+import com.example.credpass.Dao.UserPassDataDao;
+import com.example.credpass.Entity.UserPassDataBase;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

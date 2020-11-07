@@ -1,4 +1,4 @@
-package com.example.egautofill;
+package com.example.credpass;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,19 +31,15 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.example.egautofill.DTO.UIDataDTO;
-import com.example.egautofill.Entity.UserPassDataBase;
 import com.example.egautofill.Util.IImagePickerLister;
 import com.example.egautofill.Util.ImagePickerEnum;
 import com.google.android.material.appbar.AppBarLayout;
+import com.example.credpass.DTO.UIDataDTO;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.yalantis.ucrop.UCrop;
-
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.widget.Toast;

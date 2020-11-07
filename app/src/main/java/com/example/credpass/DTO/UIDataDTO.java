@@ -1,4 +1,4 @@
-package com.example.egautofill.DTO;
+package com.example.credpass.DTO;
 
 import androidx.room.ColumnInfo;
 

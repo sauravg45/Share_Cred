@@ -1,7 +1,5 @@
-package com.example.egautofill.Parser;
+package com.example.credpass.Parser;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.Application;
 import android.app.assist.AssistStructure;
 import android.content.Context;
@@ -10,17 +8,15 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.util.ArrayMap;
 import android.util.Base64;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.room.Room;
 
-import com.example.egautofill.AppDatabase;
-import com.example.egautofill.Entity.UserPassDataBase;
-import com.example.egautofill.Util.HintsStringUtil;
+import com.example.credpass.AppDatabase;
+import com.example.credpass.Entity.UserPassDataBase;
+import com.example.credpass.Util.HintsStringUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;

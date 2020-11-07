@@ -1,4 +1,4 @@
-package com.example.egautofill.Parser;
+package com.example.credpass.Parser;
 
 import android.app.assist.AssistStructure;
 import android.content.Context;
@@ -11,24 +11,22 @@ import android.graphics.drawable.Drawable;
 import android.service.autofill.Dataset;
 import android.service.autofill.FillResponse;
 import android.service.autofill.SaveInfo;
-import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.autofill.AutofillId;
 import android.view.autofill.AutofillValue;
-import android.widget.ImageView;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.Room;
 
-import com.example.egautofill.AppDatabase;
-import com.example.egautofill.DTO.UIDataDTO;
-import com.example.egautofill.R;
-import com.example.egautofill.Util.HintsStringUtil;
+import com.example.credpass.AppDatabase;
+import com.example.credpass.DTO.UIDataDTO;
+import com.example.credpass.R;
+import com.example.credpass.Util.HintsStringUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;

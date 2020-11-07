@@ -1,4 +1,4 @@
-package com.example.egautofill.DTO;
+package com.example.credpass.DTO;
 
 public class UserPassDto {
 public String userId;

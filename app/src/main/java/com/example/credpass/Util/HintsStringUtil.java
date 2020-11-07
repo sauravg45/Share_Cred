@@ -1,4 +1,4 @@
-package com.example.egautofill.Util;
+package com.example.credpass.Util;
 
 import android.app.assist.AssistStructure;
 import android.view.View;

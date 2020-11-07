@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "366038099807",
+    "firebase_url": "https://sharecred-a29e1.firebaseio.com",
+    "project_id": "sharecred-a29e1",
+    "storage_bucket": "sharecred-a29e1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366038099807:android:c87b26a5d803c2986078ea",
+        "android_client_info": {
+          "package_name": "com.example.credpass"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "366038099807-d2kg3503ajsm89c5j79mfnle32c1lrr1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.credpass",
+            "certificate_hash": "c031c40a398358fec900b103c5bcf0b604cdfa57"
+          }
+        },
+        {
+          "client_id": "366038099807-ihjo2pf2khea1q7or524qvg8vp18vh1a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcvcet-0aDQVoNkt1X4a2Xl0GUDru8y4U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "366038099807-ihjo2pf2khea1q7or524qvg8vp18vh1a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,4 @@
-package com.example.egautofill.Entity;
+package com.example.credpass.Entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

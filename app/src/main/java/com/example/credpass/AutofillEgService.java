@@ -1,37 +1,25 @@
-package com.example.egautofill;
+package com.example.credpass;
 
 import android.app.assist.AssistStructure;
 import android.content.Context;
-import android.content.IntentSender;
 import android.os.CancellationSignal;
 import android.service.autofill.AutofillService;
-import android.service.autofill.Dataset;
 import android.service.autofill.FillCallback;
 import android.service.autofill.FillContext;
 import android.service.autofill.FillRequest;
 import android.service.autofill.FillResponse;
 import android.service.autofill.SaveCallback;
-import android.service.autofill.SaveInfo;
 import android.service.autofill.SaveRequest;
-import android.text.TextUtils;
-import android.util.ArrayMap;
 import android.util.Log;
-import android.view.View;
-import android.view.autofill.AutofillId;
-import android.view.autofill.AutofillValue;
-import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 
-import com.example.egautofill.Parser.AutoFillParser;
-import com.example.egautofill.Parser.AutoFillSaveParser;
+import com.example.credpass.Parser.AutoFillParser;
+import com.example.credpass.Parser.AutoFillSaveParser;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 

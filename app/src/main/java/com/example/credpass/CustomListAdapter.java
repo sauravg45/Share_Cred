@@ -1,4 +1,4 @@
-package com.example.egautofill;
+package com.example.credpass;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,7 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.egautofill.DTO.UIDataDTO;
+import com.example.credpass.DTO.UIDataDTO;
+
 
 import org.w3c.dom.Text;
 
@@ -18,7 +19,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class CustomListAdapter extends ArrayAdapter {
     private Context context;

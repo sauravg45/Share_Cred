@@ -1,11 +1,11 @@
-package com.example.egautofill.Dao;
+package com.example.credpass.Dao;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.example.egautofill.DTO.UIDataDTO;
-import com.example.egautofill.Entity.UserPassDataBase;
+import com.example.credpass.DTO.UIDataDTO;
+import com.example.credpass.Entity.UserPassDataBase;
 
 import java.util.List;
 
