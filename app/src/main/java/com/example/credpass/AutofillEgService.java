@@ -37,7 +37,7 @@ public class AutofillEgService extends AutofillService {
         super.onConnected();
         context=getApplicationContext();
         // TODO(b/114236837): use its own preferences?
-
+//        hasEnabledAutofillServices();
         mAuthenticateResponses = false;
         mAuthenticateDatasets = false;
         mNumberDatasets = 2;
