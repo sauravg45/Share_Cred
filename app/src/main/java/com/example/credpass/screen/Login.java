@@ -46,14 +46,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                phoneNumber=phoneNoEt.getText().toString();
-                phoneNumber=(phoneNumber.length()==10)?"+91"+phoneNumber:phoneNumber;
-                phoneNumber=(phoneNumber.length()==12)?"+"+phoneNumber:phoneNumber;
-                if(phoneNumber.length()!=13){
-                    toast("Enter valid Phone Number");
-                    return ;
-                }
-
+                phoneNumber=phoneNoEt.getEditText().getText().toString();
                 PhoneAuthProvider.getInstance().verifyPhoneNumber(
                         phoneNumber,                     // Phone number to verify
                         60,                           // Timeout duration

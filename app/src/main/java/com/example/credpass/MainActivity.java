@@ -24,6 +24,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
@@ -64,6 +65,14 @@ public class MainActivity extends AppCompatActivity implements CustomListAdapter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.BIND_AUTOFILL_SERVICE) == PackageManager.PERMISSION_DENIED){
+            Toast.makeText(this, "AutoFill permission missing", Toast.LENGTH_SHORT).show();
+//            startActivity(new Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE), 0);
+            Intent intent = new Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE);
+            intent.setData(Uri.parse("package:com.example.credpass"));
+
+            startActivityForResult(intent, 1);
+        }
         //Setting up the profile section :: Adding a click listener to change profile pic button & setting other details
         CircleImageView changeProfilePic = (CircleImageView) findViewById(R.id.edit_profiePic);
         changeProfilePic.setOnClickListener(new View.OnClickListener(){
