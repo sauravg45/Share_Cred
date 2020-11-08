@@ -43,7 +43,12 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 phoneNumber=phoneNoEt.getText().toString();
-
+                phoneNumber=(phoneNumber.length()==10)?"+91"+phoneNumber:phoneNumber;
+                phoneNumber=(phoneNumber.length()==12)?"+"+phoneNumber:phoneNumber;
+                if(phoneNumber.length()!=13){
+                    toast("Enter valid Phone Number");
+                    return ;
+                }
                 PhoneAuthProvider.getInstance().verifyPhoneNumber(
                         phoneNumber,                     // Phone number to verify
                         60,                           // Timeout duration
@@ -77,12 +82,13 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                Toast.makeText(Login.this,"verification completed",Toast.LENGTH_SHORT).show();
+                toast("verified");
             }
 
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
-                Toast.makeText(Login.this,"verification fialed", Toast.LENGTH_SHORT).show();
+                toast("Verification Failed ");
+
             }
 
 
@@ -90,7 +96,8 @@ public class Login extends AppCompatActivity {
             public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(s, forceResendingToken);
                 verificationCode = s;
-                Toast.makeText(Login.this,"Code sent",Toast.LENGTH_SHORT).show();
+                toast("Code sent");
+
             }
         };
     }
@@ -104,10 +111,15 @@ public class Login extends AppCompatActivity {
                             startActivity(new Intent(Login.this, MainActivity.class));
                             finish();
                         } else {
-                            Toast.makeText(Login.this,"Incorrect OTP",Toast.LENGTH_SHORT).show();
+                            toast("Incorrect OTP");
+
                         }
                     }
                 });
+    }
+
+    private void toast(String text){
+        Toast.makeText(Login.this,text, Toast.LENGTH_SHORT).show();
     }
 
 }
