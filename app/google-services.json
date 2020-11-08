@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "366038099807-i33kle0g820vop0o8oc42822jt4vp86g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.credpass",
+            "certificate_hash": "0697f70e93853aa92bd11fd1fc9d6aaa72044d4b"
+          }
+        },
+        {
           "client_id": "366038099807-d2kg3503ajsm89c5j79mfnle32c1lrr1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

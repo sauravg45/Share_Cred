@@ -34,8 +34,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.example.egautofill.Util.IImagePickerLister;
-import com.example.egautofill.Util.ImagePickerEnum;
+import com.example.credpass.Util.IImagePickerLister;
+import com.example.credpass.Util.ImagePickerEnum;
 import com.google.android.material.appbar.AppBarLayout;
 import com.example.credpass.DTO.UIDataDTO;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
