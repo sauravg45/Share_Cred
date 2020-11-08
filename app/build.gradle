@@ -2,6 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+    signingConfigs {
+        release1 {
+            storeFile file('C:\\Users\\lenevo\\myKeys\\ShareCred.jks')
+            storePassword 'coolbro420'
+            keyAlias 'key0'
+            keyPassword 'coolbro1024'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
@@ -13,6 +21,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release1
     }
 
     buildTypes {
