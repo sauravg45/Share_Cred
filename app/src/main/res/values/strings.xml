@@ -4,10 +4,6 @@
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
     -->
-    <string-array name="imagePicker">
-        <item>From Gallery</item>
-        <item>From Camera</item>
-    </string-array>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -17,4 +13,10 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name ='otp_verification_guildeline'>Enter A 6 Digit Number that was sent to</string>
+<!--    <string name="made_with_love">Made with 0xE022 in India</string>-->
+    <string-array name="imagePicker">
+        <item>From Gallery</item>
+        <item>From Camera</item>
+    </string-array>
 </resources>

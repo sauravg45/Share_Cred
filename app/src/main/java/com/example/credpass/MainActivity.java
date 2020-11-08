@@ -53,7 +53,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements CustomListAdapter.customButtonListener, IImagePickerLister  {
+public class MainActivity extends AppCompatActivity implements CustomListAdapter.customButtonListener, IImagePickerLister {
     private static int RESULT_LOAD_IMAGE = 1;
     private static final int CAMERA_ACTION_PICK_REQUEST_CODE = 610;
     private static final int PICK_IMAGE_GALLERY_REQUEST_CODE = 609;

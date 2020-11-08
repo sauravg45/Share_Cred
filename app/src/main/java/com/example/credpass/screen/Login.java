@@ -14,6 +14,7 @@ import com.example.credpass.MainActivity;
 import com.example.credpass.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,12 +23,14 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
+import static android.icu.text.Normalizer.YES;
+
 public class Login extends AppCompatActivity {
 
     Button getOtpBu;
-    Button submitBu;
-    EditText phoneNoEt;
-    EditText otpEt;
+//    Button submitBu;
+    TextInputLayout phoneNoEt;
+//    EditText otpEt;
     String phoneNumber, otp;
     FirebaseAuth auth;
     private String verificationCode;
@@ -42,6 +45,7 @@ public class Login extends AppCompatActivity {
         getOtpBu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 phoneNumber=phoneNoEt.getText().toString();
                 phoneNumber=(phoneNumber.length()==10)?"+91"+phoneNumber:phoneNumber;
                 phoneNumber=(phoneNumber.length()==12)?"+"+phoneNumber:phoneNumber;
@@ -49,6 +53,7 @@ public class Login extends AppCompatActivity {
                     toast("Enter valid Phone Number");
                     return ;
                 }
+
                 PhoneAuthProvider.getInstance().verifyPhoneNumber(
                         phoneNumber,                     // Phone number to verify
                         60,                           // Timeout duration
@@ -58,21 +63,21 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        submitBu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                otp=otpEt.getText().toString();
-                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, otp);
-                SigninWithPhone(credential);
-            }
-        });
+//        submitBu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                otp=otpEt.getText().toString();
+//                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, otp);
+//                SigninWithPhone(credential);
+//            }
+//        });
     }
 
     private void attachElements(){
-        otpEt=findViewById(R.id.otpEt);
+//        otpEt=findViewById(R.id.otpEt);
         phoneNoEt=findViewById(R.id.editTextPhone);
         getOtpBu=findViewById(R.id.getOtpButton);
-        submitBu=findViewById(R.id.submitButton);
+//        submitBu=findViewById(R.id.submitButton);
     }
 
     private void StartFirebaseLogin() {
@@ -87,6 +92,7 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
+
                 toast("Verification Failed ");
 
             }
@@ -96,13 +102,17 @@ public class Login extends AppCompatActivity {
             public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(s, forceResendingToken);
                 verificationCode = s;
-                toast("Code sent");
+
+                Intent i = new Intent(Login.this, OtpVerification.class);
+                i.putExtra("verificationCode", s);
+                i.putExtra("phoneNo", phoneNumber);
+                startActivity(i);
 
             }
         };
     }
 
-    private void SigninWithPhone(PhoneAuthCredential credential) {
+    public void SigninWithPhone(PhoneAuthCredential credential) {
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
