@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.ArrayMap;
 import android.util.Base64;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.room.Room;
 
 import com.example.credpass.AppDatabase;
@@ -84,29 +86,38 @@ public class AutoFillSaveParser extends Application {
         }
     }
 
+    static private String getBitmapFromDrawable(@NonNull Drawable drawable) {
+        String img =null;
+        try{
+        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bmp);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] arr = stream.toByteArray();
+         img = Base64.encodeToString(arr, Base64.URL_SAFE);
+        }catch (Exception e){
+
+        }
+        return img;
+    }
+
     public String getImageFromDrawable(){
         Drawable drawable=null;
+        String res=null;
         try
         {
 
             drawable = mcontext.getPackageManager().getApplicationIcon(packageName);
-
+             res=getBitmapFromDrawable(drawable);
         }
-        catch (PackageManager.NameNotFoundException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
 
-        String img = null;
-        if(drawable instanceof BitmapDrawable) {
-            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] arr = stream.toByteArray();
-            img = Base64.encodeToString(arr, Base64.URL_SAFE);
-            return img;
-        }
-        return null;
+        return res;
     }
 
     public static String getAppNameFromPkgName(Context context, String Packagename) {

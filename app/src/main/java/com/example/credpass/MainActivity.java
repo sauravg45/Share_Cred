@@ -26,6 +26,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.InputType;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -283,5 +284,16 @@ public class MainActivity extends AppCompatActivity implements CustomListAdapter
             return false;
         }
         return true;
+    }
+
+
+    static Bitmap stringToBitMap(String encodedString) {
+        try {
+            byte[] encodeByte = Base64.decode(encodedString, Base64.URL_SAFE);
+            return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
+        }
     }
 }
