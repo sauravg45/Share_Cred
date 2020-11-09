@@ -34,6 +34,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import android.view.autofill.AutofillManager;
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.credpass.Util.IImagePickerLister;
 import com.example.credpass.Util.ImagePickerEnum;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements CustomListAdapter
     private static int RESULT_LOAD_IMAGE = 1;
     private static final int CAMERA_ACTION_PICK_REQUEST_CODE = 610;
     private static final int PICK_IMAGE_GALLERY_REQUEST_CODE = 609;
+    private AutofillManager mAutofillManager;
     public static final int CAMERA_STORAGE_REQUEST_CODE = 611;
     public static final int ONLY_CAMERA_REQUEST_CODE = 612;
     public static final int ONLY_STORAGE_REQUEST_CODE = 613;
@@ -65,13 +68,30 @@ public class MainActivity extends AppCompatActivity implements CustomListAdapter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        hasEnabledAutofillServices()
+        mAutofillManager = getSystemService(AutofillManager.class);
 
-        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.BIND_AUTOFILL_SERVICE) == PackageManager.PERMISSION_DENIED){
-            Toast.makeText(this, "AutoFill permission missing", Toast.LENGTH_SHORT).show();
-//            startActivity(new Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE), 0);
-            Intent intent = new Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE);
-            intent.setData(Uri.parse("package:com.example.credpass"));
-            startActivityForResult(intent, 1);
+        if(!mAutofillManager.hasEnabledAutofillServices()){
+//            Toast.makeText(this, "AutoFill permission missing", Toast.LENGTH_SHORT).show();
+            new MaterialDialog.Builder(this)
+                    .content(R.string.autofill_permission)
+                    .positiveText("Proceed")
+                    .negativeText("Cancel")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Intent intent = new Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE);
+                            intent.setData(Uri.parse("package:com.example.credpass"));
+                            startActivityForResult(intent, 1);
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            finishAndRemoveTask();
+                        }
+                    }).show();
+
         }
 
         //Setting up the profile section :: Adding a click listener to change profile pic button & setting other details
