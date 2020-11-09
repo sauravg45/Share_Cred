@@ -41,7 +41,7 @@
 
         <service
             android:name=".AutofillEgService"
-            android:label="Debug Autofill Service"
+            android:label="Cred Pass"
             android:permission="android.permission.BIND_AUTOFILL_SERVICE">
             <intent-filter>
                 <action android:name="android.service.autofill.AutofillService" />
