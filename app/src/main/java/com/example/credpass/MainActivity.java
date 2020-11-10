@@ -57,7 +57,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements CustomListAdapter.customButtonListener, IImagePickerLister {
+public class MainActivity extends AppCompatActivity implements CustomListAdapter.customButtonListener {
     private static int RESULT_LOAD_IMAGE = 1;
     private static final int CAMERA_ACTION_PICK_REQUEST_CODE = 610;
     private static final int PICK_IMAGE_GALLERY_REQUEST_CODE = 609;
@@ -100,10 +100,12 @@ public class MainActivity extends AppCompatActivity implements CustomListAdapter
         changeProfilePic.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                    if (checkSelfPermissions(MainActivity.this))
-                        showImagePickerDialog(MainActivity.this, MainActivity.this);
-                }
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+//                    if (checkSelfPermissions(MainActivity.this))
+//                        showImagePickerDialog(MainActivity.this, MainActivity.this);
+//                }
+                Intent inProfile = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(inProfile);
             }
         });
         //Setting behaviour for Bottom Sheet Behaviour
@@ -119,43 +121,13 @@ public class MainActivity extends AppCompatActivity implements CustomListAdapter
         //Create the an adapter & populate the list view
         AppDatabase appDatabase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"user-db").allowMainThreadQueries().build();
         List<UIDataDTO> databases= appDatabase.userPassDataDao().getAll();
-//        ArrayList<String> dataArray = prepareDataForListView(databases);
         CustomListAdapter adapter = new CustomListAdapter(MainActivity.this, databases);
         ListView listView = (ListView) findViewById(R.id.cred_list);
         adapter.setCustomButtonListener(MainActivity.this);
         listView.setAdapter(adapter);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == CAMERA_ACTION_PICK_REQUEST_CODE && resultCode == RESULT_OK){
-            Uri uri = Uri.parse(currentPhotoPath);
-            openCropActivity(uri, uri);
-        } else if(requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK){
-                Uri uri = UCrop.getOutput(data);
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            ImageView profileImageView = (ImageView) findViewById(R.id.profile_image);
-                profileImageView.setImageBitmap(bitmap);
-        } else if(requestCode == PICK_IMAGE_GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null){
 
-//            File file = null;
-            try {
-                Uri sourceUri = data.getData();
-                File file = getImageFile();
-                Uri destinationUri = Uri.fromFile(file);
-                openCropActivity(sourceUri, destinationUri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
 
     //    @Override
     @Override
@@ -174,110 +146,12 @@ public class MainActivity extends AppCompatActivity implements CustomListAdapter
 //        Toast.makeText(MainActivity.this, "Value:" + value + "pos: " + position, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onOptionSelected(ImagePickerEnum imagePickerEnum) {
-        try {
-            if (imagePickerEnum == ImagePickerEnum.FROM_CAMERA) {
-                openCamera();
-            }
-            else if (imagePickerEnum == ImagePickerEnum.FROM_GALLERY){
-                openImagesDocument();
-            }
-        } catch (IOException e){
-            e.printStackTrace();
-        }
 
-    }
 
-    private void openImagesDocument() {
-        Intent pictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        pictureIntent.setType("image/*");
-        pictureIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            String[] mimeTypes = new String[]{"image/jpeg", "image/png"};
-            pictureIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-        }
-        startActivityForResult(Intent.createChooser(pictureIntent, "Select Picture"), PICK_IMAGE_GALLERY_REQUEST_CODE);
-    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CAMERA_STORAGE_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)
-                showImagePickerDialog(this, this);
-            else if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_DENIED) {
-                toast(this, "ImageCropper needs Storage access in order to store your profile picture.");
-                finish();
-            } else if (grantResults[0] == PackageManager.PERMISSION_DENIED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                toast(this, "ImageCropper needs Camera access in order to take profile picture.");
-                finish();
-            } else if (grantResults[0] == PackageManager.PERMISSION_DENIED && grantResults[1] == PackageManager.PERMISSION_DENIED) {
-                toast(this, "ImageCropper needs Camera and Storage access in order to take profile picture.");
-                finish();
-            }
-        } else if (requestCode == ONLY_CAMERA_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                showImagePickerDialog(this, this);
-            else {
-                toast(this, "ImageCropper needs Camera access in order to take profile picture.");
-                finish();
-            }
-        } else if (requestCode == ONLY_STORAGE_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                showImagePickerDialog(this, this);
-            else {
-                toast(this, "ImageCropper needs Storage access in order to store your profile picture.");
-                finish();
-            }
-        }
-    }
 
-    public void toast(Context context, String content) {
-        Toast.makeText(context, content, Toast.LENGTH_LONG).show();
-    }
 
-    private void openCamera() throws IOException {
-        Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File file = getImageFile(); // 1
-        Uri uri;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) // 2
-            uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID.concat(".provider"), file);
-        else
-            uri = Uri.fromFile(file); // 3
-        pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri); // 4
-        startActivityForResult(pictureIntent, CAMERA_ACTION_PICK_REQUEST_CODE);
-    }
 
-    String currentPhotoPath = "";
-    private File getImageFile() throws IOException {
-        String imageFileName = "JPEG_" + System.currentTimeMillis() + "_";
-        File storageDir = new File(
-                Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_DCIM
-                ), "Camera"
-        );
-        System.out.println(storageDir.getAbsolutePath());
-        if (storageDir.exists())
-            System.out.println("File exists");
-        else
-            System.out.println("File not exists");
-        File file = File.createTempFile(
-                imageFileName, ".jpg", storageDir
-        );
-        currentPhotoPath = "file:" + file.getAbsolutePath();
-        return file;
-    }
-
-    private void openCropActivity(Uri sourceUri, Uri destinationUri) {
-        UCrop.Options options = new UCrop.Options();
-        options.setCircleDimmedLayer(true);
-        options.setCropFrameColor(ContextCompat.getColor(this, R.color.colorAccent));
-        UCrop.of(sourceUri, destinationUri)
-                .withMaxResultSize(100, 100)
-                .withAspectRatio(5f, 5f)
-                .start(this);
-    }
 
     public void showImagePickerDialog(@NonNull Context callingClassContext, IImagePickerLister imagePickerLister) {
         new MaterialDialog.Builder(callingClassContext)
@@ -308,13 +182,5 @@ public class MainActivity extends AppCompatActivity implements CustomListAdapter
     }
 
 
-    static Bitmap stringToBitMap(String encodedString) {
-        try {
-            byte[] encodeByte = Base64.decode(encodedString, Base64.URL_SAFE);
-            return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-        } catch (Exception e) {
-            e.getMessage();
-            return null;
-        }
-    }
+
 }

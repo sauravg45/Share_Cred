@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ProfileActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:gravity="center">
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/pp_profile_image"
+            android:layout_width="192dp"
+            android:layout_height="192dp"
+            android:src="@drawable/profile_pic"
+            app:civ_border_width="2dp"
+            app:civ_border_color="#FF000000"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/pp_edit_profiePic"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignBottom="@id/pp_profile_image"
+            android:layout_alignRight="@id/pp_profile_image"
+            android:layout_marginBottom="6dp"
+            android:src="@drawable/ic_plus"
+            android:layout_centerHorizontal="true"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="1dp" />
+    </RelativeLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="25dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:hint="Name"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopStart="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/pp_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:drawablePadding="4dp"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:hint="Mobile Phone"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopStart="10dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/pp_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:drawablePadding="4dp"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="30dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/pp_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:background="@drawable/rounded_shape_buttons"
+            app:strokeColor="@color/colorPrimary"
+            android:text="Save"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/pp_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/rounded_shape_buttons"
+            app:strokeColor="@color/colorPrimary"
+            android:text="Cancel"/>
+    </LinearLayout>
+
+</LinearLayout>

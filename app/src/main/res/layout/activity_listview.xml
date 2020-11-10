@@ -17,8 +17,8 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/cred_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:scaleType="fitXY"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"

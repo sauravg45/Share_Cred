@@ -13,9 +13,9 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name ='otp_verification_guildeline'>Enter A 6 Digit Number that was sent to</string>
+    <string name='otp_verification_guildeline'>Enter A 6 Digit Number that was sent to</string>
     <string name="autofill_permission">This app autofill permisson to save your passwords. Please select "Debug Autofill Service" on next screen</string>
-<!--    <string name="made_with_love">Made with 0xE022 in India</string>-->
+    <!--    <string name="made_with_love">Made with 0xE022 in India</string>-->
     <string-array name="imagePicker">
         <item>From Gallery</item>
         <item>From Camera</item>

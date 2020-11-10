@@ -1,11 +1,15 @@
 package com.example.credpass;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.credpass.DTO.UIDataDTO;
@@ -37,6 +41,7 @@ public class CustomListAdapter extends ArrayAdapter {
         TextView pass;
         TextView text;
         ImageButton button;
+        ImageView credIcon;
     }
 
     @NonNull
@@ -50,6 +55,7 @@ public class CustomListAdapter extends ArrayAdapter {
             viewHolder.text = (TextView) convertView.findViewById(R.id.cred_label);
             viewHolder.pass = (TextView) convertView.findViewById(R.id.cred_pass);
             viewHolder.button = (ImageButton) convertView.findViewById(R.id.shwHideBtn);
+            viewHolder.credIcon = (ImageView) convertView.findViewById(R.id.cred_icon);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -59,6 +65,7 @@ public class CustomListAdapter extends ArrayAdapter {
         viewHolder.text.setText(temp.getData());
         viewHolder.pass.setText(temp.getPassword());
         viewHolder.button.setTag("hidden");
+        viewHolder.credIcon.setImageBitmap(stringToBitMap(temp.getIcon()));
         viewHolder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,6 +81,16 @@ public class CustomListAdapter extends ArrayAdapter {
         super(context, R.layout.activity_listview, listItems);
         this.data = listItems;
         this.context = context;
+    }
+
+    static Bitmap stringToBitMap(String encodedString) {
+        try {
+            byte[] encodeByte = Base64.decode(encodedString, Base64.URL_SAFE);
+            return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
+        }
     }
 
 }
