@@ -27,15 +27,15 @@ import androidx.annotation.Nullable;
 public class CustomListAdapter extends ArrayAdapter {
     private Context context;
     private List data;
-    customButtonListener customListener;
+//    customButtonListener customListener;
 
-    public interface customButtonListener {
-        public void onButtonClickListener(int position, UIDataDTO data, ViewHolder viewHolder);
-    }
+//    public interface customButtonListener {
+//        public void onButtonClickListener(int position, UIDataDTO data, ViewHolder viewHolder);
+//    }
 
-    public void setCustomButtonListener(customButtonListener listener) {
-        this.customListener = listener;
-    }
+//    public void setCustomButtonListener(customButtonListener listener) {
+//        this.customListener = listener;
+//    }
 
     public class ViewHolder{
         TextView pass;
@@ -54,7 +54,7 @@ public class CustomListAdapter extends ArrayAdapter {
             viewHolder = new ViewHolder();
             viewHolder.text = (TextView) convertView.findViewById(R.id.cred_label);
             viewHolder.pass = (TextView) convertView.findViewById(R.id.cred_pass);
-            viewHolder.button = (ImageButton) convertView.findViewById(R.id.shwHideBtn);
+//            viewHolder.button = (ImageButton) convertView.findViewById(R.id.shwHideBtn);
             viewHolder.credIcon = (ImageView) convertView.findViewById(R.id.cred_icon);
             convertView.setTag(viewHolder);
         } else {
@@ -64,16 +64,16 @@ public class CustomListAdapter extends ArrayAdapter {
         final UIDataDTO temp = (UIDataDTO) getItem(position);
         viewHolder.text.setText(temp.getData());
         viewHolder.pass.setText(temp.getPassword());
-        viewHolder.button.setTag("hidden");
+//        viewHolder.button.setTag("hidden");
         viewHolder.credIcon.setImageBitmap(stringToBitMap(temp.getIcon()));
-        viewHolder.button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(customListener != null){
-                    customListener.onButtonClickListener(position,temp, viewHolder);
-                }
-            }
-        });
+//        viewHolder.button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(customListener != null){
+//                    customListener.onButtonClickListener(position,temp, viewHolder);
+//                }
+//            }
+//        });
         return convertView;
     }
 
@@ -81,6 +81,10 @@ public class CustomListAdapter extends ArrayAdapter {
         super(context, R.layout.activity_listview, listItems);
         this.data = listItems;
         this.context = context;
+    }
+    public UIDataDTO getAdapterItem(int position){
+        UIDataDTO tempItem = (UIDataDTO) getItem(position);
+        return tempItem;
     }
 
     static Bitmap stringToBitMap(String encodedString) {

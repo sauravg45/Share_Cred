@@ -28,6 +28,7 @@ import android.provider.Settings;
 import android.text.InputType;
 import android.util.Base64;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -40,6 +41,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.credpass.Util.IImagePickerLister;
 import com.example.credpass.Util.ImagePickerEnum;
+import com.example.credpass.screen.Login;
 import com.google.android.material.appbar.AppBarLayout;
 import com.example.credpass.DTO.UIDataDTO;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -57,7 +59,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements CustomListAdapter.customButtonListener {
+public class MainActivity extends AppCompatActivity  {
     private static int RESULT_LOAD_IMAGE = 1;
     private static final int CAMERA_ACTION_PICK_REQUEST_CODE = 610;
     private static final int PICK_IMAGE_GALLERY_REQUEST_CODE = 609;
@@ -100,10 +102,6 @@ public class MainActivity extends AppCompatActivity implements CustomListAdapter
         changeProfilePic.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-//                    if (checkSelfPermissions(MainActivity.this))
-//                        showImagePickerDialog(MainActivity.this, MainActivity.this);
-//                }
                 Intent inProfile = new Intent(MainActivity.this, ProfileActivity.class);
                 startActivity(inProfile);
             }
@@ -123,34 +121,49 @@ public class MainActivity extends AppCompatActivity implements CustomListAdapter
         List<UIDataDTO> databases= appDatabase.userPassDataDao().getAll();
         CustomListAdapter adapter = new CustomListAdapter(MainActivity.this, databases);
         ListView listView = (ListView) findViewById(R.id.cred_list);
-        adapter.setCustomButtonListener(MainActivity.this);
+
+//        adapter.setCustomButtonListener(MainActivity.this);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                UIDataDTO selectedItem = (UIDataDTO) parent.getItemAtPosition(position);
+                Intent editIntent = new Intent(MainActivity.this, EditCredActivity.class);
+                editIntent.putExtra("user_data", selectedItem.getData());
+                editIntent.putExtra("user_pass", selectedItem.getPassword());
+                editIntent.putExtra("app_name", selectedItem.appName);
+                startActivity(editIntent);
+            }
+        });
         listView.setAdapter(adapter);
     }
 
 
 
     //    @Override
-    @Override
-    public void onButtonClickListener(int position, UIDataDTO data, CustomListAdapter.ViewHolder viewHolder){
-        Object buttonTag = viewHolder.button.getTag();
-        if(buttonTag == "hidden"){
-            viewHolder.button.setImageResource(R.drawable.ic_visibility_off_black_24dp);
-            viewHolder.pass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-            viewHolder.button.setTag("shown");
-        } else if(buttonTag == "shown"){
-            viewHolder.button.setImageResource(R.drawable.ic_remove_red_eye_24px);
-            viewHolder.pass.setInputType( InputType.TYPE_CLASS_TEXT |
-                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            viewHolder.button.setTag("hidden");
-        }
-//        Toast.makeText(MainActivity.this, "Value:" + value + "pos: " + position, Toast.LENGTH_SHORT).show();
+//    @Override
+//    public void onButtonClickListener(int position, UIDataDTO data, CustomListAdapter.ViewHolder viewHolder){
+//        Object buttonTag = viewHolder.button.getTag();
+//        if(buttonTag == "hidden"){
+//            viewHolder.button.setImageResource(R.drawable.ic_visibility_off_black_24dp);
+//            viewHolder.pass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+//            viewHolder.button.setTag("shown");
+//        } else if(buttonTag == "shown"){
+//            viewHolder.button.setImageResource(R.drawable.ic_remove_red_eye_24px);
+//            viewHolder.pass.setInputType( InputType.TYPE_CLASS_TEXT |
+//                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
+//            viewHolder.button.setTag("hidden");
+//        }
+//    }
+
+
+
+
+
+    private void toast(String text){
+        Toast.makeText(MainActivity.this,text, Toast.LENGTH_SHORT).show();
     }
-
-
-
-
-
-
 
 
     public void showImagePickerDialog(@NonNull Context callingClassContext, IImagePickerLister imagePickerLister) {
