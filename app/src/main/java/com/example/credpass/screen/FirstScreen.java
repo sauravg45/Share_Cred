@@ -1,5 +1,6 @@
 package com.example.credpass.screen;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -8,14 +9,20 @@ import android.os.Handler;
 import android.text.Html;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.credpass.MainActivity;
 import com.example.credpass.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class FirstScreen extends AppCompatActivity {
 
+
+    public static final String TAG="FirstScreen";
     FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,5 +49,26 @@ public class FirstScreen extends AppCompatActivity {
             }
         }, splashScreenTimeOut*1000);
 
+
+        
+  FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                    return;
+                }
+
+                // Get new FCM registration token
+                String token = task.getResult();
+
+                // Log and toast
+                String msg = getString(R.string.fcm_token, token);
+                Log.d("First Screen", msg);
+                Toast.makeText(FirstScreen.this, msg, Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
+  
 }
