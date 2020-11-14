@@ -17,8 +17,8 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/cred_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:scaleType="fitXY"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
@@ -41,13 +41,13 @@
                 android:inputType="textPassword" />
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/shwHideBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_remove_red_eye_24px" />
+<!--        <ImageButton-->
+<!--            android:id="@+id/shwHideBtn"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:src="@drawable/ic_remove_red_eye_24px" />-->
     </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -11,6 +11,7 @@ import android.service.autofill.FillResponse;
 import android.service.autofill.SaveCallback;
 import android.service.autofill.SaveRequest;
 import android.util.Log;
+import android.view.autofill.AutofillManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,7 +38,7 @@ public class AutofillEgService extends AutofillService {
         super.onConnected();
         context=getApplicationContext();
         // TODO(b/114236837): use its own preferences?
-
+//        hasEnabledAutofillServices();
         mAuthenticateResponses = false;
         mAuthenticateDatasets = false;
         mNumberDatasets = 2;
