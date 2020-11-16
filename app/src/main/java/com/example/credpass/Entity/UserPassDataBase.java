@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey;
 public class UserPassDataBase {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "UID")
     public int uid;
 
     @ColumnInfo(name = "PACKAGE")

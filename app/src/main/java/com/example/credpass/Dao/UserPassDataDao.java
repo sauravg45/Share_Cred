@@ -33,4 +33,10 @@ public interface UserPassDataDao {
     @Insert
     void saveUserPassData(UserPassDataBase... userPassDataBase);
 
+    @Query("DELETE from UserPassDataBase where uid =:skey")
+    void deleteBySkey(Long skey);
+
+    @Query("UPDATE UserPassDataBase SET DATA=:data and PASSWORD=:password where UID=:uid")
+    void updateBySkey(Long uid,String data,String password);
+
 }
