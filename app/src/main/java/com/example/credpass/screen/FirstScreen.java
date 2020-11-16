@@ -62,6 +62,7 @@ public class FirstScreen extends AppCompatActivity {
                 // Get new FCM registration token
                 String token = task.getResult();
 
+
                 // Log and toast
                 String msg = getString(R.string.fcm_token, token);
                 Log.d("First Screen", msg);

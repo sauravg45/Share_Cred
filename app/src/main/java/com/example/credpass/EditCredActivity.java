@@ -96,4 +96,6 @@ public class EditCredActivity extends AppCompatActivity {
                     InputType.TYPE_TEXT_VARIATION_PASSWORD);
         }
     }
+
+    
 }

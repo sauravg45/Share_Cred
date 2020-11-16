@@ -4,6 +4,9 @@ import androidx.room.ColumnInfo;
 
 public class UIDataDTO {
 
+    @ColumnInfo(name="UID")
+    public Long skey;
+
     @ColumnInfo(name="PASSWORD")
     public  String password;
 
@@ -47,6 +50,14 @@ public class UIDataDTO {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public Long getSkey() {
+        return skey;
+    }
+
+    public void setSkey(Long skey) {
+        this.skey = skey;
     }
 
     @Override
