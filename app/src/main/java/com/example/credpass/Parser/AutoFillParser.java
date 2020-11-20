@@ -23,7 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.Room;
 
-import com.example.credpass.AppDatabase;
+import com.example.credpass.database.AppDatabase;
 import com.example.credpass.DTO.UIDataDTO;
 import com.example.credpass.R;
 import com.example.credpass.Util.HintsStringUtil;

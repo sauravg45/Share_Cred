@@ -7,7 +7,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.ArrayMap;
 import android.util.Base64;
@@ -16,7 +15,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.room.Room;
 
-import com.example.credpass.AppDatabase;
+import com.example.credpass.database.AppDatabase;
 import com.example.credpass.Entity.UserPassDataBase;
 import com.example.credpass.Util.HintsStringUtil;
 
