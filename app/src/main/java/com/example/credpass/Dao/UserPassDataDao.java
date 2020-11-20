@@ -1,5 +1,6 @@
 package com.example.credpass.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -38,5 +39,8 @@ public interface UserPassDataDao {
 
     @Query("UPDATE UserPassDataBase SET DATA=:data and PASSWORD=:password where UID=:uid")
     void updateBySkey(Long uid,String data,String password);
+
+    @Query("SELECT * FROM UserPassDataBase")
+    LiveData<List<UIDataDTO>> getLifeCycleAll();
 
 }

@@ -1,16 +1,16 @@
 package com.example.credpass;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
+import com.example.credpass.database.AppDatabase;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -63,6 +63,7 @@ public class EditCredActivity extends AppCompatActivity {
                     etPassword.setEnabled(true);
                     btnEdit.setText("Save");
                     btnEdit.setTag("saveMode");
+                    //
                 } else if(btnEdit.getTag() == "saveMode"){
                     etApp.setEnabled(false);
                     etUser.setEnabled(false);
@@ -97,5 +98,14 @@ public class EditCredActivity extends AppCompatActivity {
         }
     }
 
+    public void delete(Long skey){
+        AppDatabase appDatabase= Room.databaseBuilder(getApplicationContext(), AppDatabase.class,"user-db").allowMainThreadQueries().build();
+        appDatabase.userPassDataDao().deleteBySkey(skey);
+    }
+
+    public void editUserPass(Long skey,String userName,String password){
+        AppDatabase appDatabase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"user-db").allowMainThreadQueries().build();
+        appDatabase.userPassDataDao().updateBySkey(skey,userName,password);
+    }
     
 }

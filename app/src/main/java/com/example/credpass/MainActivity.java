@@ -6,9 +6,10 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-import androidx.room.Room;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.Manifest;
@@ -16,47 +17,30 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.provider.Settings;
-import android.text.InputType;
-import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import android.view.autofill.AutofillManager;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.example.credpass.DTO.UserPassViewModel;
+import com.example.credpass.Entity.UserPassDataBase;
 import com.example.credpass.Util.IImagePickerLister;
 import com.example.credpass.Util.ImagePickerEnum;
-import com.example.credpass.screen.Login;
-import com.google.android.material.appbar.AppBarLayout;
+import com.example.credpass.database.AppDatabase;
 import com.example.credpass.DTO.UIDataDTO;
+import com.example.credpass.database.AppExecutors;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.yalantis.ucrop.UCrop;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import android.widget.Toast;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity  {
@@ -67,6 +51,8 @@ public class MainActivity extends AppCompatActivity  {
     public static final int CAMERA_STORAGE_REQUEST_CODE = 611;
     public static final int ONLY_CAMERA_REQUEST_CODE = 612;
     public static final int ONLY_STORAGE_REQUEST_CODE = 613;
+    private AppDatabase mDb;
+    private UserPassViewModel userDataViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,46 +102,38 @@ public class MainActivity extends AppCompatActivity  {
         sheetBehaviour.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
         sheetBehaviour.setHalfExpandedRatio((float) 0.85);
 
-        //Create the an adapter & populate the list view
-        AppDatabase appDatabase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"user-db").allowMainThreadQueries().build();
-        List<UIDataDTO> databases= appDatabase.userPassDataDao().getAll();
-        CustomListAdapter adapter = new CustomListAdapter(MainActivity.this, databases);
-        ListView listView = (ListView) findViewById(R.id.cred_list);
 
-//        adapter.setCustomButtonListener(MainActivity.this);
+        mDb=AppDatabase.getAppDatabase(getApplicationContext());
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
+        userDataViewModel= ViewModelProviders.of(this).get(UserPassViewModel.class);
+       userDataViewModel.getAllUIdata().observe(this, new Observer<List<UIDataDTO>>() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                UIDataDTO selectedItem = (UIDataDTO) parent.getItemAtPosition(position);
-                Intent editIntent = new Intent(MainActivity.this, EditCredActivity.class);
-                editIntent.putExtra("user_data", selectedItem.getData());
-                editIntent.putExtra("user_pass", selectedItem.getPassword());
-                editIntent.putExtra("app_name", selectedItem.appName);
-                startActivity(editIntent);
+            public void onChanged(@Nullable final List<UIDataDTO> uiDataDTOS) {
+                Log.d("data from Liv",uiDataDTOS.toString());
+                CustomListAdapter adapter = new CustomListAdapter(MainActivity.this, uiDataDTOS);
+                ListView listView = (ListView) findViewById(R.id.cred_list);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        UIDataDTO selectedItem = (UIDataDTO) parent.getItemAtPosition(position);
+                        Intent editIntent = new Intent(MainActivity.this, EditCredActivity.class);
+                        editIntent.putExtra("user_data", selectedItem.getData());
+                        editIntent.putExtra("user_pass", selectedItem.getPassword());
+                        editIntent.putExtra("app_name", selectedItem.appName);
+                        startActivity(editIntent);
+                    }
+                });
+                listView.setAdapter(adapter);
             }
         });
-        listView.setAdapter(adapter);
+
+
+
+
     }
 
-
-
-    //    @Override
-//    @Override
-//    public void onButtonClickListener(int position, UIDataDTO data, CustomListAdapter.ViewHolder viewHolder){
-//        Object buttonTag = viewHolder.button.getTag();
-//        if(buttonTag == "hidden"){
-//            viewHolder.button.setImageResource(R.drawable.ic_visibility_off_black_24dp);
-//            viewHolder.pass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-//            viewHolder.button.setTag("shown");
-//        } else if(buttonTag == "shown"){
-//            viewHolder.button.setImageResource(R.drawable.ic_remove_red_eye_24px);
-//            viewHolder.pass.setInputType( InputType.TYPE_CLASS_TEXT |
-//                    InputType.TYPE_TEXT_VARIATION_PASSWORD);
-//            viewHolder.button.setTag("hidden");
-//        }
-//    }
 
 
 
