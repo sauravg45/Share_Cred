@@ -18,11 +18,13 @@ public class EditCredActivity extends AppCompatActivity {
     private String userData;
     private String userPassword;
     private String appName;
+    Long skey;
     private boolean showPass = false;
     CheckBox showHidePassWord;
     TextInputEditText etPassword;
     MaterialButton btnEdit;
     MaterialButton btnCancel;
+    TextInputEditText etUser;
     MaterialButton btnSave;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +34,10 @@ public class EditCredActivity extends AppCompatActivity {
         userData = i.getExtras().getString("user_data");
         userPassword = i.getExtras().getString("user_pass");
         appName = i.getExtras().getString("app_name");
+        skey=i.getExtras().getLong("data_skey");
         TextInputEditText etApp = (TextInputEditText) findViewById(R.id.ec_appName);
         etApp.setText(appName);
-        TextInputEditText etUser = (TextInputEditText) findViewById(R.id.ec_cred_data);
+        etUser = (TextInputEditText) findViewById(R.id.ec_cred_data);
         etUser.setText(userData);
         etPassword = (TextInputEditText) findViewById(R.id.ec_cred_pass);
         etPassword.setText(userPassword);
@@ -63,6 +66,7 @@ public class EditCredActivity extends AppCompatActivity {
                     etPassword.setEnabled(true);
                     btnEdit.setText("Save");
                     btnEdit.setTag("saveMode");
+
                     //
                 } else if(btnEdit.getTag() == "saveMode"){
                     etApp.setEnabled(false);
@@ -70,6 +74,7 @@ public class EditCredActivity extends AppCompatActivity {
                     etPassword.setEnabled(false);
                     btnEdit.setText("Edit");
                     btnEdit.setTag("editMode");
+                    editUserPass();
                 }
             }
         });
@@ -96,6 +101,7 @@ public class EditCredActivity extends AppCompatActivity {
             etPassword.setInputType(InputType.TYPE_CLASS_TEXT |
                     InputType.TYPE_TEXT_VARIATION_PASSWORD);
         }
+
     }
 
     public void delete(Long skey){
@@ -103,9 +109,12 @@ public class EditCredActivity extends AppCompatActivity {
         appDatabase.userPassDataDao().deleteBySkey(skey);
     }
 
-    public void editUserPass(Long skey,String userName,String password){
+    public void editUserPass(){
         AppDatabase appDatabase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"user-db").allowMainThreadQueries().build();
-        appDatabase.userPassDataDao().updateBySkey(skey,userName,password);
+        appDatabase.userPassDataDao().updateBySkey(skey,etUser.getText().toString(),etPassword.getText().toString());
+        Intent in = new Intent(EditCredActivity.this, MainActivity.class);
+        startActivity(in);
+        finish();
     }
     
 }
