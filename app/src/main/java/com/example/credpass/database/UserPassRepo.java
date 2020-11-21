@@ -21,7 +21,6 @@ public class UserPassRepo {
         AppDatabase database=AppDatabase.getAppDatabase(application);
         userDataDao=database.userPassDataDao();
         userPassData=userDataDao.getLifeCycleAll();
-        Log.d("Lets see Repo",userPassData.toString());
     }
 
     public LiveData<List<UIDataDTO>>  getAllData(){

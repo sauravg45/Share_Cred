@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity  {
                         editIntent.putExtra("user_data", selectedItem.getData());
                         editIntent.putExtra("user_pass", selectedItem.getPassword());
                         editIntent.putExtra("app_name", selectedItem.appName);
+                        editIntent.putExtra("data_skey",selectedItem.skey);
                         startActivity(editIntent);
                     }
                 });
