@@ -111,6 +111,7 @@ public class EditCredActivity extends AppCompatActivity {
 
     public void editUserPass(){
         AppDatabase appDatabase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"user-db").allowMainThreadQueries().build();
+       // set data here meena for etUser and etPassword
         appDatabase.userPassDataDao().updateBySkey(skey,etUser.getText().toString(),etPassword.getText().toString());
         Intent in = new Intent(EditCredActivity.this, MainActivity.class);
         startActivity(in);

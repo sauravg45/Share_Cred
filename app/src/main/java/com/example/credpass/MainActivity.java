@@ -37,11 +37,14 @@ import com.example.credpass.Util.ImagePickerEnum;
 import com.example.credpass.database.AppDatabase;
 import com.example.credpass.DTO.UIDataDTO;
 import com.example.credpass.database.AppExecutors;
+import com.example.credpass.firebase.FireBaseAndLocalQuery;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity  {
     private static int RESULT_LOAD_IMAGE = 1;
@@ -51,15 +54,17 @@ public class MainActivity extends AppCompatActivity  {
     public static final int CAMERA_STORAGE_REQUEST_CODE = 611;
     public static final int ONLY_CAMERA_REQUEST_CODE = 612;
     public static final int ONLY_STORAGE_REQUEST_CODE = 613;
+    private TextView userName;
     private AppDatabase mDb;
     private UserPassViewModel userDataViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        hasEnabledAutofillServices()
+        userName=(TextView) findViewById(R.id.mainName);
+        Map<String,String> localDataMap= FireBaseAndLocalQuery.getProfileData(this);
+        userName.setText(localDataMap.get(FireBaseAndLocalQuery.userName));
         mAutofillManager = getSystemService(AutofillManager.class);
-
         if(!mAutofillManager.hasEnabledAutofillServices()){
 //            Toast.makeText(this, "AutoFill permission missing", Toast.LENGTH_SHORT).show();
             new MaterialDialog.Builder(this)

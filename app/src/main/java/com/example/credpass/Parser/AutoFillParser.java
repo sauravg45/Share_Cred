@@ -2,6 +2,7 @@ package com.example.credpass.Parser;
 
 import android.app.assist.AssistStructure;
 import android.content.Context;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,10 +24,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.Room;
 
+import com.example.credpass.DTO.AutofillParserDTO;
 import com.example.credpass.database.AppDatabase;
 import com.example.credpass.DTO.UIDataDTO;
 import com.example.credpass.R;
 import com.example.credpass.Util.HintsStringUtil;
+import com.example.credpass.screen.SimpleAuthActivity;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,7 +41,7 @@ public class AutoFillParser {
     String TAG="AutoFill Service";
     Context applicationContext;
     Context viewContext;
-    public FillResponse structureParser(AssistStructure structure, Context applicationContext,Context viewContext){
+    public AutofillParserDTO structureParser(AssistStructure structure, Context applicationContext,Context viewContext){
         ArrayMap<String, AutofillId> fields=getAutoFillableFields(structure);
        this.viewContext=viewContext;
        this.applicationContext=applicationContext;
@@ -46,15 +49,32 @@ public class AutoFillParser {
 
             return null;
         }
-        FillResponse response = createResponse(applicationContext, fields,structure);
+       // FillResponse response = createResponse(applicationContext, fields,structure);
+        String packageName = applicationContext.getPackageName();
+        packageName=structure.getActivityComponent().getPackageName();
+       // FillResponse response=getDataFromDB(packageName,fields,context);
+        AppDatabase appDatabase= Room.databaseBuilder(applicationContext,AppDatabase.class,"user-db").allowMainThreadQueries().build();
+        String dataType=checkDataAsked(fields);
+        List<UIDataDTO> dbData=new ArrayList<>();
+        for(Map.Entry<String,AutofillId> field:fields.entrySet()){
+            if(dataType==HintsStringUtil.passwordIdBoth){
+                if(field.getKey()!=View.AUTOFILL_HINT_PASSWORD){
+                    dbData.addAll(appDatabase.userPassDataDao().getByTagAndIsPassId(field.getKey(),dataType));
 
-        return response;
+                }
+            }else{
+                dbData=appDatabase.userPassDataDao().getByTagAndIsPassId(field.getKey(),dataType);
+
+            }
+        }
+        return new AutofillParserDTO(dbData,fields);
+
     }
 
-    private FillResponse createResponse(Context context, ArrayMap<String, AutofillId> fields,AssistStructure structure) {
+   /* private FillResponse createResponse(Context context, ArrayMap<String, AutofillId> fields,AssistStructure structure) {
         String packageName = context.getPackageName();
         packageName=structure.getActivityComponent().getPackageName();
-        FillResponse response=getDataFromDB(packageName,fields,context);
+       // FillResponse response=getDataFromDB(packageName,fields,context);
         return response;
     }
 
@@ -76,14 +96,16 @@ public class AutoFillParser {
         return genarateDataset(dbData,fields,dataType);
 
     }
-
+*/
+/*
 
     private FillResponse genarateDataset(List<UIDataDTO> dbData,ArrayMap<String, AutofillId> fields,String dataType) {
         FillResponse.Builder response = new FillResponse.Builder();
         String packageName = viewContext.getPackageName();
         for(UIDataDTO userPass:dbData){
             String value="";
-            Dataset.Builder dataset = new Dataset.Builder();
+            Dataset.Builder lockedDataset = new Dataset.Builder();
+            Dataset unlockedDataset=unlockedDataset(userPass,fields);
            for (Map.Entry<String, AutofillId> field : fields.entrySet()){
 
                if(field.getKey()!=View.AUTOFILL_HINT_PASSWORD){
@@ -91,11 +113,18 @@ public class AutoFillParser {
                }else{
                    value=userPass.getPassword();
                }
+
+
                RemoteViews presentation = newDatasetPresentation(packageName,value,userPass.getIcon());
-               dataset.setValue(field.getValue(), AutofillValue.forText(value), presentation);
+               IntentSender authentication =
+                       SimpleAuthActivity.newIntentSenderForDataset(this, unlockedDataset);
+               lockedDataset.setValue(field.getValue(), null, presentation).setAuthentication(authentication);
            }
-            response.addDataset(dataset.build());
+
+              response.addDataset(lockedDataset.build());
         }
+
+        //for notifying to save password
         Collection<AutofillId> ids = fields.values();
         AutofillId[] requiredIds = new AutofillId[ids.size()];
         ids.toArray(requiredIds);
@@ -103,6 +132,24 @@ public class AutoFillParser {
                 // We're simple, so we're generic
                 new SaveInfo.Builder(SaveInfo.SAVE_DATA_TYPE_PASSWORD|SaveInfo.SAVE_DATA_TYPE_USERNAME, requiredIds).build());
         return response.build();
+    }
+*/
+
+    private Dataset unlockedDataset(UIDataDTO userPass,ArrayMap<String, AutofillId> fields){
+        String value="";
+        String packageName = viewContext.getPackageName();
+        Dataset.Builder dataset = new Dataset.Builder();
+        for (Map.Entry<String, AutofillId> field : fields.entrySet()){
+
+            if(field.getKey()!=View.AUTOFILL_HINT_PASSWORD){
+                value=userPass.getData();
+            }else{
+                value=userPass.getPassword();
+            }
+            RemoteViews presentation = newDatasetPresentation(packageName,value,userPass.getIcon());
+            dataset.setValue(field.getValue(), AutofillValue.forText(value), presentation);
+        }
+        return dataset.build();
     }
 
     private RemoteViews newDatasetPresentation(@NonNull String packageName,

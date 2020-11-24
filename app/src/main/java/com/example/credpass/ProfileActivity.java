@@ -13,6 +13,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -22,12 +23,14 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.autofill.AutofillManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.credpass.Util.IImagePickerLister;
 import com.example.credpass.Util.ImagePickerEnum;
+import com.example.credpass.firebase.FireBaseAndLocalQuery;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.yalantis.ucrop.UCrop;
@@ -39,6 +42,8 @@ public class ProfileActivity extends AppCompatActivity implements IImagePickerLi
     private TextInputEditText EtName;
     private TextInputEditText EtPhone;
     private CircleImageView BtnEditProfilePic;
+    private Button cancelBtn;
+    private Button saveBtn;
     private static int RESULT_LOAD_IMAGE = 1;
     private static final int CAMERA_ACTION_PICK_REQUEST_CODE = 610;
     private static final int PICK_IMAGE_GALLERY_REQUEST_CODE = 609;
@@ -46,16 +51,24 @@ public class ProfileActivity extends AppCompatActivity implements IImagePickerLi
     public static final int CAMERA_STORAGE_REQUEST_CODE = 611;
     public static final int ONLY_CAMERA_REQUEST_CODE = 612;
     public static final int ONLY_STORAGE_REQUEST_CODE = 613;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    static SharedPreferences sharedpreferences;
+    Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext=this;
         setContentView(R.layout.activity_profile);
         BtnEditProfilePic = (CircleImageView) findViewById(R.id.pp_edit_profiePic);
+        sharedpreferences=getSharedPreferences(MyPREFERENCES,Context.MODE_PRIVATE);
         EtName = (TextInputEditText) findViewById(R.id.pp_user_name);
         EtPhone = (TextInputEditText) findViewById(R.id.pp_phone);
-
-        EtPhone.setText("+919968380690");
-        EtName.setText("Saurabh Meena");
+        saveBtn=(Button) findViewById(R.id.pp_save);
+        cancelBtn=(Button)findViewById(R.id.pp_cancel);
+        String name=sharedpreferences.getString(FireBaseAndLocalQuery.userName,"Buddy");
+        String phoneNo=sharedpreferences.getString(FireBaseAndLocalQuery.userPhone,"");
+        EtPhone.setText(phoneNo);
+        EtName.setText(name);
 
         BtnEditProfilePic.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -66,6 +79,22 @@ public class ProfileActivity extends AppCompatActivity implements IImagePickerLi
                 }
             }
         });
+
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Meena pass correct values here
+                FireBaseAndLocalQuery.setProfile(EtName.getEditableText().toString(),EtPhone.getEditableText().toString(),mContext);
+                finish();
+            }
+        });
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
     }
 
     public void showImagePickerDialog(@NonNull Context callingClassContext, IImagePickerLister imagePickerLister) {
