@@ -48,12 +48,14 @@
                 android:text="\@fountainhead"
                 android:textColor="@color/colorBackground"
                 android:fontFamily="cursive"/>
+
             <TextView
+                android:id="@+id/mainName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text = "Sourabh Meena"
-                android:textSize="24sp"
-                android:textColor="@color/colorBackground"/>
+                android:text="User"
+                android:textColor="@color/colorBackground"
+                android:textSize="24sp" />
         </LinearLayout>
     </LinearLayout>
 

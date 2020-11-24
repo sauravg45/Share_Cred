@@ -2,26 +2,43 @@ package com.example.credpass;
 
 import android.app.assist.AssistStructure;
 import android.content.Context;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.CancellationSignal;
 import android.service.autofill.AutofillService;
+import android.service.autofill.Dataset;
 import android.service.autofill.FillCallback;
 import android.service.autofill.FillContext;
 import android.service.autofill.FillRequest;
 import android.service.autofill.FillResponse;
 import android.service.autofill.SaveCallback;
+import android.service.autofill.SaveInfo;
 import android.service.autofill.SaveRequest;
+import android.util.ArrayMap;
 import android.util.Log;
+import android.view.View;
+import android.view.autofill.AutofillId;
 import android.view.autofill.AutofillManager;
+import android.view.autofill.AutofillValue;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 
+import com.example.credpass.DTO.AutofillParserDTO;
+import com.example.credpass.DTO.UIDataDTO;
 import com.example.credpass.Parser.AutoFillParser;
 import com.example.credpass.Parser.AutoFillSaveParser;
+import com.example.credpass.screen.SimpleAuthActivity;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
+import static com.example.credpass.CustomListAdapter.stringToBitMap;
 import static java.util.stream.Collectors.toList;
 
 public class AutofillEgService extends AutofillService {
@@ -37,15 +54,7 @@ public class AutofillEgService extends AutofillService {
     public void onConnected() {
         super.onConnected();
         context=getApplicationContext();
-        // TODO(b/114236837): use its own preferences?
-//        hasEnabledAutofillServices();
-        mAuthenticateResponses = false;
-        mAuthenticateDatasets = false;
-        mNumberDatasets = 2;
 
-        Log.d(TAG, "onConnected(): numberDatasets=" + mNumberDatasets
-                + ", authResponses=" + mAuthenticateResponses
-                + ", authDatasets=" + mAuthenticateDatasets);
     }
 
     /**
@@ -66,9 +75,95 @@ public class AutofillEgService extends AutofillService {
         // Find autofillable fields
         AssistStructure structure = getLatestAssistStructure(request);
         AutoFillParser parser=new AutoFillParser();
-        FillResponse mresponse=parser.structureParser(structure,context,this);
-        callback.onSuccess(mresponse);
+        AutofillParserDTO autoFillData=parser.structureParser(structure,context,this);
+       if(autoFillData.getDbData()!=null){
+           FillResponse mresponse=genarateDataset(autoFillData.getDbData(),autoFillData.getFields());
+           callback.onSuccess(mresponse);
+       }
+
     }
+
+
+    private FillResponse genarateDataset(List<UIDataDTO> dbData, ArrayMap<String, AutofillId> fields) {
+        FillResponse.Builder response = new FillResponse.Builder();
+        String packageName = this.getPackageName();
+        for(UIDataDTO userPass:dbData){
+            String value="";
+            Dataset.Builder lockedDataset = new Dataset.Builder();
+            Dataset unlockedDataset=unlockedDataset(userPass,fields);
+            for (Map.Entry<String, AutofillId> field : fields.entrySet()){
+
+                if(field.getKey()!= View.AUTOFILL_HINT_PASSWORD){
+                    value=userPass.getData();
+                }else{
+                    value=userPass.getPassword();
+                }
+
+
+                RemoteViews presentation = newDatasetPresentation(packageName,value,userPass.getIcon());
+                IntentSender authentication =
+                        SimpleAuthActivity.newIntentSenderForDataset(this, unlockedDataset);
+                lockedDataset.setValue(field.getValue(), null, presentation).setAuthentication(authentication);
+            }
+
+            response.addDataset(lockedDataset.build());
+        }
+
+        //for notifying to save password
+        Collection<AutofillId> ids = fields.values();
+        AutofillId[] requiredIds = new AutofillId[ids.size()];
+        ids.toArray(requiredIds);
+        response.setSaveInfo(
+                // We're simple, so we're generic
+                new SaveInfo.Builder(SaveInfo.SAVE_DATA_TYPE_PASSWORD|SaveInfo.SAVE_DATA_TYPE_USERNAME, requiredIds).build());
+        return response.build();
+    }
+
+
+    private Dataset unlockedDataset(UIDataDTO userPass,ArrayMap<String, AutofillId> fields){
+        String value="";
+        String packageName = this.getPackageName();
+        Dataset.Builder dataset = new Dataset.Builder();
+        for (Map.Entry<String, AutofillId> field : fields.entrySet()){
+
+            if(field.getKey()!=View.AUTOFILL_HINT_PASSWORD){
+                value=userPass.getData();
+            }else{
+                value=userPass.getPassword();
+            }
+            RemoteViews presentation = newDatasetPresentation(packageName,value,userPass.getIcon());
+            dataset.setValue(field.getValue(), AutofillValue.forText(value), presentation);
+        }
+        return dataset.build();
+    }
+
+
+    private RemoteViews newDatasetPresentation(@NonNull String packageName,
+                                               @NonNull CharSequence text,String iconString) {
+
+        Drawable icon=null;
+        try
+        {
+
+            icon = context.getPackageManager().getApplicationIcon(packageName);
+
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        RemoteViews presentation =
+                new RemoteViews(packageName, R.layout.multidataset_service_list_item);
+        presentation.setTextViewText(R.id.text, text);
+        Bitmap bitIcon=stringToBitMap(iconString);
+        if(bitIcon!=null){
+            presentation.setImageViewBitmap(R.id.icon,bitIcon);
+        }else{
+            presentation.setImageViewResource(R.id.icon, R.mipmap.ic_launcher);
+        }
+        return presentation;
+    }
+
 
     @Override
     public void onSaveRequest(SaveRequest request, SaveCallback callback) {
