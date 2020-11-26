@@ -33,10 +33,13 @@ import com.example.credpass.Util.ImagePickerEnum;
 import com.example.credpass.firebase.FireBaseAndLocalQuery;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity implements IImagePickerLister {
     private TextInputEditText EtName;
@@ -51,8 +54,7 @@ public class ProfileActivity extends AppCompatActivity implements IImagePickerLi
     public static final int CAMERA_STORAGE_REQUEST_CODE = 611;
     public static final int ONLY_CAMERA_REQUEST_CODE = 612;
     public static final int ONLY_STORAGE_REQUEST_CODE = 613;
-    public static final String MyPREFERENCES = "MyPrefs" ;
-    static SharedPreferences sharedpreferences;
+
     Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,15 +62,13 @@ public class ProfileActivity extends AppCompatActivity implements IImagePickerLi
         mContext=this;
         setContentView(R.layout.activity_profile);
         BtnEditProfilePic = (CircleImageView) findViewById(R.id.pp_edit_profiePic);
-        sharedpreferences=getSharedPreferences(MyPREFERENCES,Context.MODE_PRIVATE);
         EtName = (TextInputEditText) findViewById(R.id.pp_user_name);
         EtPhone = (TextInputEditText) findViewById(R.id.pp_phone);
         saveBtn=(Button) findViewById(R.id.pp_save);
         cancelBtn=(Button)findViewById(R.id.pp_cancel);
-        String name=sharedpreferences.getString(FireBaseAndLocalQuery.userName,"Buddy");
-        String phoneNo=sharedpreferences.getString(FireBaseAndLocalQuery.userPhone,"");
-        EtPhone.setText(phoneNo);
-        EtName.setText(name);
+        Map<String,String> profilaData=FireBaseAndLocalQuery.getProfileData(this);
+        EtName.setText(profilaData.get(FireBaseAndLocalQuery.sUsers));
+        EtPhone.setText(profilaData.get(FireBaseAndLocalQuery.sPhone));
 
         BtnEditProfilePic.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -249,6 +249,9 @@ public class ProfileActivity extends AppCompatActivity implements IImagePickerLi
             }
             ImageView profileImageView = (ImageView) findViewById(R.id.pp_profile_image);
             profileImageView.setImageBitmap(bitmap);
+            FireBaseAndLocalQuery.saveToFirebaseStorage(uri);
+            FireBaseAndLocalQuery.storeImage(bitmap,getApplicationContext().getPackageName());
+
         } else if(requestCode == PICK_IMAGE_GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null){
 
             try {
@@ -262,5 +265,7 @@ public class ProfileActivity extends AppCompatActivity implements IImagePickerLi
 
         }
     }
+
+
 
 }

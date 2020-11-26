@@ -53,6 +53,13 @@ public class FirstScreen extends AppCompatActivity {
         String madeWithLoveString = "Made with " + Html.fromHtml(redHeart, Html.FROM_HTML_MODE_LEGACY) + " in India";
         TextView txtView = (TextView) findViewById(R.id.first_screen_text);
         txtView.setText(madeWithLoveString);
+
+
+
+    }
+
+
+    private void setFCMToken(){
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         if(!sharedpreferences.getBoolean("FCM_TOKEN",false)){
             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
@@ -69,10 +76,7 @@ public class FirstScreen extends AppCompatActivity {
                 }
             });
         }
-
-
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -96,6 +100,7 @@ public class FirstScreen extends AppCompatActivity {
             @Override
             public void run() {
                 if (user != null) {
+                    setFCMToken();
                     startActivity(new Intent(FirstScreen.this, MainActivity.class));
                     finish();
                 } else {

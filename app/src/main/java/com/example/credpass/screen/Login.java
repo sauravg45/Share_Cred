@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.credpass.MainActivity;
 import com.example.credpass.R;
+import com.example.credpass.firebase.FireBaseAndLocalQuery;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -47,6 +48,8 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
 
                 phoneNumber=phoneNoEt.getEditText().getText().toString();
+                phoneNumber="+91"+phoneNumber;
+
                 PhoneAuthProvider.getInstance().verifyPhoneNumber(
                         phoneNumber,                     // Phone number to verify
                         60,                           // Timeout duration
