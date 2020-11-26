@@ -3,6 +3,7 @@ package com.example.credpass.screen;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.credpass.MainActivity;
 import com.example.credpass.R;
+import com.example.credpass.firebase.FireBaseAndLocalQuery;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -27,6 +29,7 @@ public class OtpVerification extends AppCompatActivity {
     private MaterialButton submitBu;
     private String verificationCode;
     private TextView guidelineText;
+    Context mcontext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +37,7 @@ public class OtpVerification extends AppCompatActivity {
         otpEt = findViewById(R.id.otpEt);
         submitBu = findViewById(R.id.submitButton);
         guidelineText = findViewById(R.id.otp_guideline);
-
+        mcontext=this;
         Intent intent = getIntent();
         verificationCode = intent.getExtras().getString("verificationCode");
         String otpGuidline = getString(R.string.otp_verification_guildeline) + " " + intent.getExtras().getString("phoneNo");
@@ -64,6 +67,8 @@ public class OtpVerification extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            Intent intent = getIntent();
+                            FireBaseAndLocalQuery.savePhoneNo(mcontext,intent.getExtras().getString("phoneNo"));
                             startActivity(new Intent(OtpVerification.this, MainActivity.class));
                             finish();
                         } else {

@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         userName=(TextView) findViewById(R.id.mainName);
         Map<String,String> localDataMap= FireBaseAndLocalQuery.getProfileData(this);
-        userName.setText(localDataMap.get(FireBaseAndLocalQuery.userName));
+        userName.setText(localDataMap.get(FireBaseAndLocalQuery.sUsers));
         mAutofillManager = getSystemService(AutofillManager.class);
         if(!mAutofillManager.hasEnabledAutofillServices()){
 //            Toast.makeText(this, "AutoFill permission missing", Toast.LENGTH_SHORT).show();
@@ -178,6 +178,16 @@ public class MainActivity extends AppCompatActivity  {
         return true;
     }
 
+
+
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+        Map<String,String> localDataMap= FireBaseAndLocalQuery.getProfileData(this);
+        userName.setText(localDataMap.get(FireBaseAndLocalQuery.sUsers));
+    }
 
 
 }

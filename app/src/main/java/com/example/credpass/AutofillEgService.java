@@ -55,6 +55,7 @@ public class AutofillEgService extends AutofillService {
         super.onConnected();
         context=getApplicationContext();
 
+
     }
 
     /**
@@ -76,9 +77,11 @@ public class AutofillEgService extends AutofillService {
         AssistStructure structure = getLatestAssistStructure(request);
         AutoFillParser parser=new AutoFillParser();
         AutofillParserDTO autoFillData=parser.structureParser(structure,context,this);
-       if(autoFillData.getDbData()!=null){
-           FillResponse mresponse=genarateDataset(autoFillData.getDbData(),autoFillData.getFields());
-           callback.onSuccess(mresponse);
+       if(autoFillData!=null) {
+           if (autoFillData.getDbData() != null) {
+               FillResponse mresponse = genarateDataset(autoFillData.getDbData(), autoFillData.getFields());
+               callback.onSuccess(mresponse);
+           }
        }
 
     }
@@ -186,4 +189,5 @@ public class AutofillEgService extends AutofillService {
     private void toast(@NonNull CharSequence message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
+
 }
