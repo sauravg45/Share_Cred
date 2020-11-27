@@ -1,6 +1,7 @@
 package com.example.credpass.firebase;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,14 +12,19 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.credpass.MainActivity;
+import com.example.credpass.screen.OtpVerification;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -39,6 +45,7 @@ public class FireBaseAndLocalQuery {
     public  static String sUsers="User";
     public static String intialName="Hi there";
     public static String picUrl="PIC_URL";
+    public static String isStatusSaved="SavedStatus";
     public static String TAG="FIREBASEANDLOCALQUERY";
     static private StorageReference mStorageRef;
 
@@ -87,7 +94,19 @@ public class FireBaseAndLocalQuery {
 
 
     static public void saveUserByKeyValue(String key,String Value){
+        fDatabase.child(sUsers).child(userId).child(key).setValue(Value);
+    }
 
+    static public Boolean isStateChanged(Context mcontext){
+        sharedpreferences = mcontext.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        return sharedpreferences.getBoolean(isStatusSaved,false);
+    }
+
+    static public void setStateChanged(Context mcontext,Boolean val){
+        sharedpreferences = mcontext.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putBoolean(isStatusSaved,val);
+        editor.commit();
     }
 
     static public void saveToFirebaseStorage(Uri file){
@@ -100,7 +119,16 @@ public class FireBaseAndLocalQuery {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        getDownloadUrl(ref.getDownloadUrl());
+                       // getDownloadUrl(ref.getDownloadUrl());
+
+
+                        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                               // String url=uri.toString();
+                                saveUserByKeyValue(picUrl,uri.toString());
+                            }
+                        });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -172,17 +200,17 @@ public class FireBaseAndLocalQuery {
         // Create a media file name
 
         File mediaFile;
-        String mImageName=userId+".jpg";
+        String mImageName="profile.jpg";
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
         return mediaFile;
     }
 
-    public Bitmap getBitmap(String packageName) {
+    public static Bitmap getBitmap(String packageName) {
         String path=Environment.getExternalStorageDirectory()
                 + "/Android/data/"
                 + packageName
                 + "/Files/"
-                +userId+".jpg";
+                +"profile.jpg";
         Bitmap bitmap=null;
         try {
             File f= new File(path);
@@ -195,5 +223,7 @@ public class FireBaseAndLocalQuery {
         }
         return bitmap ;
     }
+
+
 
 }
