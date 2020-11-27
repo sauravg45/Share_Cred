@@ -54,6 +54,7 @@ public class ProfileActivity extends AppCompatActivity implements IImagePickerLi
     public static final int CAMERA_STORAGE_REQUEST_CODE = 611;
     public static final int ONLY_CAMERA_REQUEST_CODE = 612;
     public static final int ONLY_STORAGE_REQUEST_CODE = 613;
+    ImageView profileImageView;
 
     Context mContext;
     @Override
@@ -61,6 +62,7 @@ public class ProfileActivity extends AppCompatActivity implements IImagePickerLi
         super.onCreate(savedInstanceState);
         mContext=this;
         setContentView(R.layout.activity_profile);
+        profileImageView = (ImageView) findViewById(R.id.pp_profile_image);
         BtnEditProfilePic = (CircleImageView) findViewById(R.id.pp_edit_profiePic);
         EtName = (TextInputEditText) findViewById(R.id.pp_user_name);
         EtPhone = (TextInputEditText) findViewById(R.id.pp_phone);
@@ -69,6 +71,12 @@ public class ProfileActivity extends AppCompatActivity implements IImagePickerLi
         Map<String,String> profilaData=FireBaseAndLocalQuery.getProfileData(this);
         EtName.setText(profilaData.get(FireBaseAndLocalQuery.sUsers));
         EtPhone.setText(profilaData.get(FireBaseAndLocalQuery.sPhone));
+        Bitmap profilePicture=FireBaseAndLocalQuery.getBitmap(getApplicationContext().getPackageName());
+        if(profilePicture!=null){
+            profileImageView.setImageBitmap(profilePicture);
+        }else{
+            profileImageView.setImageResource(R.drawable.profile_pic);
+        }
 
         BtnEditProfilePic.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -85,6 +93,7 @@ public class ProfileActivity extends AppCompatActivity implements IImagePickerLi
             public void onClick(View view) {
                 //Meena pass correct values here
                 FireBaseAndLocalQuery.setProfile(EtName.getEditableText().toString(),EtPhone.getEditableText().toString(),mContext);
+                FireBaseAndLocalQuery.setStateChanged(mContext,true);
                 finish();
             }
         });
@@ -247,7 +256,7 @@ public class ProfileActivity extends AppCompatActivity implements IImagePickerLi
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            ImageView profileImageView = (ImageView) findViewById(R.id.pp_profile_image);
+
             profileImageView.setImageBitmap(bitmap);
             FireBaseAndLocalQuery.saveToFirebaseStorage(uri);
             FireBaseAndLocalQuery.storeImage(bitmap,getApplicationContext().getPackageName());

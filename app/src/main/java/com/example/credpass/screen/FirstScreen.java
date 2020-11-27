@@ -35,6 +35,7 @@ public class FirstScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mcontext=this;
+        auth = FirebaseAuth.getInstance();
 
         KeyguardManager km = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
         if(km.isKeyguardSecure()) {

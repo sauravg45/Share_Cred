@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity  {
     private TextView userName;
     private AppDatabase mDb;
     private UserPassViewModel userDataViewModel;
+    CircleImageView profilePic;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +91,13 @@ public class MainActivity extends AppCompatActivity  {
         }
 
         //Setting up the profile section :: Adding a click listener to change profile pic button & setting other details
+        profilePic=(CircleImageView) findViewById(R.id.profile_image);
+        Bitmap profilePicture=FireBaseAndLocalQuery.getBitmap(getApplicationContext().getPackageName());
+        if(profilePicture!=null){
+            profilePic.setImageBitmap(profilePicture);
+        }else{
+            profilePic.setImageResource(R.drawable.profile_pic);
+        }
         CircleImageView changeProfilePic = (CircleImageView) findViewById(R.id.edit_profiePic);
         changeProfilePic.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -183,10 +192,19 @@ public class MainActivity extends AppCompatActivity  {
 
     @Override
     public void onResume() {
-
         super.onResume();
-        Map<String,String> localDataMap= FireBaseAndLocalQuery.getProfileData(this);
-        userName.setText(localDataMap.get(FireBaseAndLocalQuery.sUsers));
+        if(FireBaseAndLocalQuery.isStateChanged(this)){
+            Map<String,String> localDataMap= FireBaseAndLocalQuery.getProfileData(this);
+            userName.setText(localDataMap.get(FireBaseAndLocalQuery.sUsers));
+            FireBaseAndLocalQuery.setStateChanged(this,false);
+            Bitmap profilePicture=FireBaseAndLocalQuery.getBitmap(getApplicationContext().getPackageName());
+            if(profilePic!=null){
+                profilePic.setImageBitmap(profilePicture);
+            }else{
+                profilePic.setImageResource(R.drawable.profile_pic);
+            }
+        }
+
     }
 
 
