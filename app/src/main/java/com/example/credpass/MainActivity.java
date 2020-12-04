@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity  {
         userName.setText(localDataMap.get(FireBaseAndLocalQuery.sUsers));
         mAutofillManager = getSystemService(AutofillManager.class);
         if(!mAutofillManager.hasEnabledAutofillServices()){
-//            Toast.makeText(this, "AutoFill permission missing", Toast.LENGTH_SHORT).show();
             new MaterialDialog.Builder(this)
                     .content(R.string.autofill_permission)
                     .positiveText("Proceed")
@@ -109,6 +108,8 @@ public class MainActivity extends AppCompatActivity  {
         //Setting behaviour for Bottom Sheet Behaviour
         CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         getSupportActionBar().setElevation(0);
+        
+//        getSupportActionBar().s
         LinearLayout contentLayout = coordinatorLayout.findViewById(R.id.contentLayout);
         BottomSheetBehavior<LinearLayout> sheetBehaviour = BottomSheetBehavior.from(contentLayout);
         sheetBehaviour.setFitToContents(false);
