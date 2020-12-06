@@ -161,7 +161,7 @@ public class ProfileActivity extends AppCompatActivity implements IImagePickerLi
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public boolean checkSelfPermissions(@NonNull Activity activity) {
+    public  boolean checkSelfPermissions(@NonNull Activity activity) {
         if (activity.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED && activity.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_STORAGE_REQUEST_CODE);
             return false;
