@@ -77,8 +77,9 @@ public class ProfileActivity extends AppCompatActivity implements IImagePickerLi
         }else{
             profileImageView.setImageResource(R.drawable.profile_pic);
         }
-
-        BtnEditProfilePic.setOnClickListener(new View.OnClickListener(){
+        //display back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);BtnEditProfilePic.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -104,6 +105,14 @@ public class ProfileActivity extends AppCompatActivity implements IImagePickerLi
             }
         });
 
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        Intent in = new Intent(ProfileActivity.this, MainActivity.class);
+        startActivity(in);
+        finish();
+        return true;
     }
 
     public void showImagePickerDialog(@NonNull Context callingClassContext, IImagePickerLister imagePickerLister) {

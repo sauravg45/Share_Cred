@@ -30,6 +30,11 @@ public class EditCredActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_cred);
+
+        //action bar back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         Intent i = getIntent();
         userData = i.getExtras().getString("user_data");
         userPassword = i.getExtras().getString("user_pass");
@@ -90,6 +95,13 @@ public class EditCredActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        Intent in = new Intent(EditCredActivity.this, MainActivity.class);
+        startActivity(in);
+        finish();
+        return true;
     }
 
     public void Check(View v){
