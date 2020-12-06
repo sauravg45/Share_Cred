@@ -113,7 +113,6 @@ public class FireBaseAndLocalQuery {
         mStorageRef = FirebaseStorage.getInstance().getReference();
         //Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
         StorageReference ref = mStorageRef.child("users_images/"+userId);
-
         ref.putFile(file)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override

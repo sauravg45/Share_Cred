@@ -103,7 +103,7 @@ public class Login extends AppCompatActivity {
                 i.putExtra("verificationCode", s);
                 i.putExtra("phoneNo", phoneNumber);
                 startActivity(i);
-
+                finish();
             }
         };
     }
@@ -127,5 +127,7 @@ public class Login extends AppCompatActivity {
     private void toast(String text){
         Toast.makeText(Login.this,text, Toast.LENGTH_SHORT).show();
     }
+
+
 
 }
