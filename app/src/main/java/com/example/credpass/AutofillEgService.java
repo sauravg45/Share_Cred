@@ -77,48 +77,57 @@ public class AutofillEgService extends AutofillService {
         AssistStructure structure = getLatestAssistStructure(request);
         AutoFillParser parser=new AutoFillParser();
         AutofillParserDTO autoFillData=parser.structureParser(structure,context,this);
-       if(autoFillData!=null) {
-           if (autoFillData.getDbData() != null) {
-               FillResponse mresponse = genarateDataset(autoFillData.getDbData(), autoFillData.getFields());
+
+               FillResponse mresponse = genarateDataset(autoFillData);
                callback.onSuccess(mresponse);
-           }
-       }
+
 
     }
 
 
-    private FillResponse genarateDataset(List<UIDataDTO> dbData, ArrayMap<String, AutofillId> fields) {
+    private FillResponse genarateDataset( AutofillParserDTO autoFillData) {
+
+
         FillResponse.Builder response = new FillResponse.Builder();
         String packageName = this.getPackageName();
-        for(UIDataDTO userPass:dbData){
-            String value="";
-            Dataset.Builder lockedDataset = new Dataset.Builder();
-            Dataset unlockedDataset=unlockedDataset(userPass,fields);
-            for (Map.Entry<String, AutofillId> field : fields.entrySet()){
+        if(autoFillData.getDbData()!=null && autoFillData.getFields()!=null){
+            ArrayMap<String, AutofillId> fields=autoFillData.getFields();
+            List<UIDataDTO> dbData=autoFillData.getDbData();
+            for(UIDataDTO userPass:dbData){
+                String value="";
+                Dataset.Builder lockedDataset = new Dataset.Builder();
+                Dataset unlockedDataset=unlockedDataset(userPass,fields);
+                for (Map.Entry<String, AutofillId> field : fields.entrySet()){
 
-                if(field.getKey()!= View.AUTOFILL_HINT_PASSWORD){
-                    value=userPass.getData();
-                }else{
-                    value=userPass.getPassword();
+                    if(field.getKey()!= View.AUTOFILL_HINT_PASSWORD){
+                        value=userPass.getData();
+                    }else{
+                        value=userPass.getPassword();
+                    }
+
+
+                    RemoteViews presentation = newDatasetPresentation(packageName,value,userPass.getIcon());
+                    IntentSender authentication =
+                            SimpleAuthActivity.newIntentSenderForDataset(this, unlockedDataset);
+                    lockedDataset.setValue(field.getValue(), null, presentation).setAuthentication(authentication);
                 }
 
-
-                RemoteViews presentation = newDatasetPresentation(packageName,value,userPass.getIcon());
-                IntentSender authentication =
-                        SimpleAuthActivity.newIntentSenderForDataset(this, unlockedDataset);
-                lockedDataset.setValue(field.getValue(), null, presentation).setAuthentication(authentication);
+                response.addDataset(lockedDataset.build());
             }
+        }
 
-            response.addDataset(lockedDataset.build());
+        if(autoFillData.getFields()!=null){
+            ArrayMap<String, AutofillId> fields=autoFillData.getFields();
+            Collection<AutofillId> ids = fields.values();
+            AutofillId[] requiredIds = new AutofillId[ids.size()];
+            ids.toArray(requiredIds);
+            response.setSaveInfo(
+                    // We're simple, so we're generic
+                    new SaveInfo.Builder(SaveInfo.SAVE_DATA_TYPE_PASSWORD|SaveInfo.SAVE_DATA_TYPE_USERNAME, requiredIds).build());
         }
 
         //for notifying to save password
-        Collection<AutofillId> ids = fields.values();
-        AutofillId[] requiredIds = new AutofillId[ids.size()];
-        ids.toArray(requiredIds);
-        response.setSaveInfo(
-                // We're simple, so we're generic
-                new SaveInfo.Builder(SaveInfo.SAVE_DATA_TYPE_PASSWORD|SaveInfo.SAVE_DATA_TYPE_USERNAME, requiredIds).build());
+
         return response.build();
     }
 
