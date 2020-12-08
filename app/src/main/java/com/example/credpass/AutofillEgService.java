@@ -44,11 +44,8 @@ import static java.util.stream.Collectors.toList;
 public class AutofillEgService extends AutofillService {
 
 
-    private static final String TAG = "DebugService";
+    private static final String TAG = "AutofillService";
 
-    private boolean mAuthenticateResponses;
-    private boolean mAuthenticateDatasets;
-    private int mNumberDatasets;
     Context context;
     @Override
     public void onConnected() {
@@ -77,10 +74,10 @@ public class AutofillEgService extends AutofillService {
         AssistStructure structure = getLatestAssistStructure(request);
         AutoFillParser parser=new AutoFillParser();
         AutofillParserDTO autoFillData=parser.structureParser(structure,context,this);
-
-               FillResponse mresponse = genarateDataset(autoFillData);
-               callback.onSuccess(mresponse);
-
+            if(autoFillData!=null) {
+                FillResponse mresponse = genarateDataset(autoFillData);
+                callback.onSuccess(mresponse);
+            }
 
     }
 
@@ -180,11 +177,9 @@ public class AutofillEgService extends AutofillService {
     @Override
     public void onSaveRequest(SaveRequest request, SaveCallback callback) {
         List<FillContext> fillContexts = request.getFillContexts();
-        List<AssistStructure> structures =
-                fillContexts.stream().map(FillContext::getStructure).collect(toList());
+//       // List<AssistStructure> structures =
+//                fillContexts.stream().map(FillContext::getStructure).collect(toList());
         AssistStructure structure = fillContexts.get(fillContexts.size() - 1).getStructure();
-        //ArrayMap<String, AutofillId> fields = getAutofillableFields(structure);
-       // ClientParser parser = new ClientParser(structures);
         AutoFillSaveParser parser=new AutoFillSaveParser();
         parser.structureParser(structure,context);
         Log.d(TAG, "onSaveRequest()");
@@ -192,11 +187,5 @@ public class AutofillEgService extends AutofillService {
     }
 
 
-    /**
-     * Displays a toast with the given message.
-     */
-    private void toast(@NonNull CharSequence message) {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-    }
 
 }
