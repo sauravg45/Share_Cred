@@ -9,8 +9,11 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.credpass.database.AppDatabase;
+import com.example.credpass.firebase.FireBaseAndLocalQuery;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -25,6 +28,7 @@ public class EditCredActivity extends AppCompatActivity {
     MaterialButton btnEdit;
     MaterialButton btnCancel;
     TextInputEditText etUser;
+    ImageView appIcon;
     MaterialButton btnSave;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +44,10 @@ public class EditCredActivity extends AppCompatActivity {
         userPassword = i.getExtras().getString("user_pass");
         appName = i.getExtras().getString("app_name");
         skey=i.getExtras().getLong("data_skey");
-        TextInputEditText etApp = (TextInputEditText) findViewById(R.id.ec_appName);
+        String icon=i.getExtras().getString("icon");
+        appIcon=(ImageView) findViewById(R.id.appIconImsgeView);
+        appIcon.setImageBitmap(FireBaseAndLocalQuery.stringToBitMap(icon));
+        TextView etApp = (TextView) findViewById(R.id.ec_appName);
         etApp.setText(appName);
         etUser = (TextInputEditText) findViewById(R.id.ec_cred_data);
         etUser.setText(userData);
@@ -98,8 +105,7 @@ public class EditCredActivity extends AppCompatActivity {
     }
     @Override
     public boolean onSupportNavigateUp() {
-        Intent in = new Intent(EditCredActivity.this, MainActivity.class);
-        startActivity(in);
+
         finish();
         return true;
     }

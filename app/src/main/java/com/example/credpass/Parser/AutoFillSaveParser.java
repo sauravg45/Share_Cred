@@ -140,7 +140,6 @@ public class AutoFillSaveParser extends Application {
            userPassDataBase.setAppName(getAppNameFromPkgName(mcontext,packageName));
            userPassDataBase.setIcon(getImageFromDrawable());
            userPassDataBase.setdata(tagValue.getValue());
-           userPassDataBase.setAppName(packageName);
            userPassDataBase.setTag(tagValue.getKey());
            userPassDataBase.setTimestamp(mtimestsmp);
            userPassDataBase.setIdentifier(identifier);
