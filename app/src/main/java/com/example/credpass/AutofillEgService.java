@@ -78,7 +78,6 @@ public class AutofillEgService extends AutofillService {
                 FillResponse mresponse = genarateDataset(autoFillData);
                 callback.onSuccess(mresponse);
             }
-
     }
 
 
